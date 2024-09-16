@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom";
 import styles from "./City.module.css";
+import { useCities } from "../contexts/CiteisContext";
+import { useEffect, useState } from "react";
 
 /* eslint-disable react/prop-types */
 const formatDate = (date) =>
@@ -11,16 +13,13 @@ const formatDate = (date) =>
   }).format(new Date(date));
 
 function City() {
-  // TEMP DATA
-  const currentCity = {
-    cityName: "Lisbon",
-    emoji: "🇵🇹",
-    date: "2027-10-31T15:59:59.138Z",
-    notes: "My favorite city so far!",
-  };
-
+  // consume the context and get the current city and the fetch function
+  const { currentCity, onCityMount } = useCities();
+  // get the id for the current city from the parm of the URL
   const { id } = useParams();
-  const { cityName, emoji, date, notes } = currentCity;
+  const { cityName, date, notes, emoji } = currentCity;
+
+  useEffect(() => onCityMount(id), [id]); // fetch the data about the city on the component mount
 
   return (
     <div className={styles.city}>

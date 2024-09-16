@@ -2,8 +2,10 @@ import styles from "./CountriesList.module.css";
 import Spinner from "./Spinner";
 import CountryItem from "./CountryItem";
 import Message from "./Message";
+import { useCities } from "../contexts/CiteisContext";
 /* eslint-disable react/prop-types */
-function CountriesList({ cities, isLoading }) {
+function CountriesList() {
+  const { cities, isLoading } = useCities();
   // return the spinner if the data is still loading
   if (isLoading) return <Spinner />;
   // If there are no visited city display a message

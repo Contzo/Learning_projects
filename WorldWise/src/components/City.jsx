@@ -19,7 +19,9 @@ function City() {
   const { id } = useParams();
   const { cityName, date, notes, emoji } = currentCity;
 
-  useEffect(() => onCityMount(id), [id]); // fetch the data about the city on the component mount
+  useEffect(() => {
+    onCityMount(id);
+  }, [id]); // fetch the data about the city on the component mount
 
   return (
     <div className={styles.city}>

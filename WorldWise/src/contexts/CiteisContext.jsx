@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import City from "../components/City";
 
 const CitiesContext = createContext();
 
@@ -38,6 +37,24 @@ function CitiesProvider({ children }) {
       setIsLoading(false);
     }
   }
+  async function createCity(newCity) {
+    try {
+      setIsLoading(true);
+      const response = await fetch(`${BASE_URL}/cities`, {
+        method: "POST",
+        body: JSON.stringify(newCity),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setCities([...cities, data]);
+    } catch (error) {
+      alert("Can't fetch the city");
+    } finally {
+      setIsLoading(false);
+    }
+  }
   return (
     <CitiesContext.Provider
       value={{
@@ -45,6 +62,7 @@ function CitiesProvider({ children }) {
         isLoading,
         currentCity,
         onCityMount: fetchCity,
+        createCity,
       }}
     >
       {children}

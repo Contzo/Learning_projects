@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import styles from "./City.module.css";
 import { useCities } from "../contexts/CiteisContext";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Spinner from "./Spinner";
 
 /* eslint-disable react/prop-types */

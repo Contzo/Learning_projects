@@ -1,5 +1,5 @@
 import styles from "./CityList.module.css";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import Spinner from "./Spinner";
 import CityItem from "./CityItem";
 import Message from "./Message";
@@ -17,8 +17,8 @@ function CityList() {
   );
 }
 // Define prop types for CityList
-CityList.propTypes = {
-  cities: PropTypes.arrayOf(PropTypes.object).isRequired, // Array of objects
-  isLoading: PropTypes.bool.isRequired, // Boolean
-};
+// CityList.propTypes = {
+//   cities: PropTypes.arrayOf(PropTypes.object).isRequired, // Array of objects
+//   isLoading: PropTypes.bool.isRequired, // Boolean
+// };
 export default CityList;

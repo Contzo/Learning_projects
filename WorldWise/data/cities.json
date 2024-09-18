@@ -35,66 +35,6 @@
         "lng": 13.376933665713324
       },
       "id": "98443197"
-    },
-    {
-      "id": "e090",
-      "cityName": "Saint-Antonin",
-      "country": "France",
-      "emoji": "🇫🇷",
-      "date": "2024-09-17T17:25:18.139Z",
-      "notes": "",
-      "position": {
-        "lat": "43.72395803712458",
-        "lng": "0.8174251500045183"
-      }
-    },
-    {
-      "id": "35a8",
-      "cityName": "Le Bleymard",
-      "country": "France",
-      "emoji": "🇫🇷",
-      "date": "2024-09-17T17:34:22.256Z",
-      "notes": "",
-      "position": {
-        "lat": "44.54369744804712",
-        "lng": "3.8059631770656925"
-      }
-    },
-    {
-      "id": "3d3d",
-      "cityName": "Abriola",
-      "country": "Italy",
-      "emoji": "🇮🇹",
-      "date": "2024-09-17T17:39:18.724Z",
-      "notes": "nice",
-      "position": {
-        "lat": "40.51520122863927",
-        "lng": "15.778803583801272"
-      }
-    },
-    {
-      "id": "ec99",
-      "cityName": "Karpenisi",
-      "country": "Greece",
-      "emoji": "🇬🇷",
-      "date": "2024-09-17T17:41:45.162Z",
-      "notes": "",
-      "position": {
-        "lat": "38.82348360513148",
-        "lng": "21.84612902895056"
-      }
-    },
-    {
-      "id": "b12f",
-      "cityName": "Ankara",
-      "country": "Turkiye",
-      "emoji": "🇹🇷",
-      "date": "2024-09-17T17:42:17.403Z",
-      "notes": "",
-      "position": {
-        "lat": "40.045011148558515",
-        "lng": "32.17444192056517"
-      }
     }
   ]
 }

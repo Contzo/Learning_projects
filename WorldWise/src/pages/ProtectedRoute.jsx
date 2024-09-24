@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 /* eslint-disable react/prop-types */
 function ProtectedRoute({ children }) {
-  const { isAuthenticated } = useAuth;
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   useEffect(

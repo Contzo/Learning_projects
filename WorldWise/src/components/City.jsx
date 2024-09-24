@@ -18,14 +18,14 @@ function City() {
   const { currentCity, onCityMount, isLoading } = useCities();
   // get the id for the current city from the parm of the URL
   const { id } = useParams();
-  const { cityName, date, notes, emoji } = currentCity;
+  const { cityName, date, notes, emoji, id: currId } = currentCity;
 
   useEffect(() => {
     onCityMount(id);
-  }, [id]); // fetch the data about the city on the component mount
+  }, [id, onCityMount]); // fetch the data about the city on the component mount
 
   // return the spinner element if while we fetch the data
-  if (isLoading) return <Spinner />;
+  if (isLoading || id !== currId) return <Spinner />;
 
   return (
     <div className={styles.city}>

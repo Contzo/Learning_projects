@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Firefox Developer Edition",
+      "type": "firefox",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
+      "firefoxExecutable": "C:\\Program Files\\Firefox Developer Edition\\firefox.exe",
+      "pathMappings": [
+        {
+          "url": "http://localhost:3000/src",
+          "path": "${workspaceFolder}/src"
+        }
+      ]
+    }
+  ]
+}

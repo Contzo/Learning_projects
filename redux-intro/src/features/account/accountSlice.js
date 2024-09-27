@@ -18,6 +18,7 @@ export default function accountReducer(state = initialStateAccount, action) {
         balance: state.balance + action.payload.amount,
       };
     case "account/payLoan":
+      if (state.balance < state.loan) return state;
       return {
         ...state,
         loan: 0,

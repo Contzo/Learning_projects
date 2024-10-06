@@ -5,7 +5,7 @@ import { createOrder } from "../../services/apiRestaurant";
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
-    str
+    str,
   );
 
 const fakeCart = [
@@ -97,7 +97,7 @@ export async function action({ request }) {
   if (!isValidPhone(order.phone))
     errors.phone = "Please provide a valid phone number";
   if (Object.keys(errors).length > 0) return errors;
-  // if we don't have any error create new error and redirect
+  // if we don't have any error create new order and redirect
   const newOrder = await createOrder(order);
   return redirect(`/order/${newOrder.id}`);
 }

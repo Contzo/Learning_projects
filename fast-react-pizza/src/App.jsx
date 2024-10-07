@@ -12,6 +12,7 @@ import Menu, { loader as loaderMenu } from "./features/menu/Menu";
 const router = createBrowserRouter([
   {
     element: <AppLayout />,
+    errorElement: <Error />,
     children: [
       {
         path: "/",

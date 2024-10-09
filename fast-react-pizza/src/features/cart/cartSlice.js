@@ -50,6 +50,7 @@ export const {
   deleteItem,
   increaseItemQuantity,
   decreaseItemQuantity,
-} = createSlice.actions;
+  clearCart,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

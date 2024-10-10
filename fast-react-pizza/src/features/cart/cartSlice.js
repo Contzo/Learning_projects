@@ -47,7 +47,7 @@ const cartSlice = createSlice({
 
 export const {
   addItem,
-  deleteItemP,
+  deleteItem,
   increaseItemQuantity,
   decreaseItemQuantity,
   clearCart,
@@ -64,3 +64,11 @@ export const getTotalCartPizzas = createSelector([getCart], (items) =>
 export const getTotalCartPrice = createSelector([getCart], (items) =>
   items.reduce((totalPrice, item) => totalPrice + item.totalPrice, 0),
 );
+
+export const getSinglePizzaQuantity = (id) =>
+  createSelector([getCart], (cart) =>
+    cart.reduce(
+      (sum, item) => (sum = sum + item.id === id ? item.quantity : 0),
+      0,
+    ),
+  );

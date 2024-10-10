@@ -55,7 +55,7 @@ export const {
 
 export default cartSlice.reducer;
 
-const getCart = (state) => state.cart.cart;
+export const getCart = (state) => state.cart.cart;
 
 export const getTotalCartPizzas = createSelector([getCart], (items) =>
   items.reduce((totalItems, item) => totalItems + item.quantity, 0),

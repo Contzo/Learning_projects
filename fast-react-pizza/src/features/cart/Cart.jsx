@@ -1,7 +1,10 @@
 import LinkButton from "../../ui/LinkButton";
 import Button from "../../ui/Button";
 import CartItem from "./CartItem";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { clearCart, getCart } from "./cartSlice";
+import { getUserName } from "../../features/user/userSlice";
+import EmptyCart from "./EmptyCart";
 
 const fakeCart = [
   {
@@ -28,9 +31,10 @@ const fakeCart = [
 ];
 
 function Cart() {
-  const userName = useSelector((state) => state.user.userName);
-  const cart = fakeCart;
-
+  const userName = useSelector(getUserName);
+  const cart = useSelector(getCart);
+  const dispatch = useDispatch();
+  if (!cart.length) return <EmptyCart />;
   return (
     <div className="px-4 py-3">
       <LinkButton to="/menu">&larr; Back to menu</LinkButton>
@@ -45,7 +49,9 @@ function Cart() {
         <Button to="/order/new" type="primary">
           Order pizza
         </Button>
-        <Button type="secondary">Clear cart</Button>
+        <Button onClick={() => dispatch(clearCart())} type="secondary">
+          Clear cart
+        </Button>
       </div>
     </div>
   );

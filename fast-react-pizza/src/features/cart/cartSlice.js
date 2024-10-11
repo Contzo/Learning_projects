@@ -65,10 +65,12 @@ export const getTotalCartPrice = createSelector([getCart], (items) =>
   items.reduce((totalPrice, item) => totalPrice + item.totalPrice, 0),
 );
 
-export const getSinglePizzaQuantity = (id) =>
-  createSelector([getCart], (cart) =>
-    cart.reduce(
-      (sum, item) => (sum = sum + item.id === id ? item.quantity : 0),
-      0,
-    ),
-  );
+// moemoized selector
+// export const getSinglePizzaQuantity = (id) =>
+//   createSelector(
+//     [getCart],
+//     (cart) => cart.find((item) => item.pizzaId === id)?.quantity ?? 0,
+//   );
+
+export const getSinglePizzaQuantity = (id) => (state) =>
+  state.cart.cart.find((item) => item.pizzaId === id)?.quantity ?? 0;

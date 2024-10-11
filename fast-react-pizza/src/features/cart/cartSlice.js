@@ -36,8 +36,10 @@ const cartSlice = createSlice({
       // payload = pizzaId
       // search the item we want to update
       const item = state.cart.find((item) => item.pizzaId === action.payload);
-      item.quantity++; // decrease the quantity
+      item.quantity--; // decrease the quantity
       item.totalPrice = item.quantity * item.unitPrice; // update the price
+
+      if (item.quantity === 0) cartSlice.caseReducers.deleteItem(state, action);
     },
     clearCart(state) {
       state.cart = [];

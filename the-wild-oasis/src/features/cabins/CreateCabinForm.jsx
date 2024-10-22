@@ -15,7 +15,7 @@ const FormRow = styled.div`
   padding: 1.2rem 0;
 
   &:first-child {
-    padding-top: 0;
+    padding-top: 0rem;
   }
 
   &:last-child {

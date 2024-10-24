@@ -5,11 +5,15 @@ import Form from "../../ui/Form";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
-import { useForm } from "react-hook-form";
+import { get, useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCabin } from "../../services/apiCabins";
 import toast from "react-hot-toast";
 import FormRow from "../../ui/FormRow";
+
+const Label = styled.label`
+  font-weight: 500;
+`;
 
 function CreateCabinForm() {
   const { register, handleSubmit, reset, getValues, formState } = useForm();
@@ -30,10 +34,11 @@ function CreateCabinForm() {
   }
   function onError(errors) {
     console.log(errors);
+    console.log(getValues().regularPrice);
   }
   return (
     <Form onSubmit={handleSubmit(onSubmit, onError)}>
-      <FormRow label="name" error={errors?.name?.message}>
+      <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
           id="name"
@@ -42,8 +47,7 @@ function CreateCabinForm() {
           })}
         />
       </FormRow>
-      {/* <FormRow>
-        <Label htmlFor="maxCapacity">Maximum capacity</Label>
+      <FormRow label="Maximum capacity" error={errors?.maxCapacity?.message}>
         <Input
           type="number"
           id="maxCapacity"
@@ -56,9 +60,7 @@ function CreateCabinForm() {
           })}
         />
       </FormRow>
-
-      <FormRow>
-        <Label htmlFor="regularPrice">Regular price</Label>
+      <FormRow label="Regular price" error={errors?.regularPrice?.message}>
         <Input
           type="number"
           id="regularPrice"
@@ -71,9 +73,7 @@ function CreateCabinForm() {
           })}
         />
       </FormRow>
-
-      <FormRow>
-        <Label htmlFor="discount">Discount</Label>
+      <FormRow label="Discount" error={errors?.discount?.message}>
         <Input
           type="number"
           id="discount"
@@ -87,8 +87,7 @@ function CreateCabinForm() {
         />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="description">Description for website</Label>
+      <FormRow label="Description" error={errors?.description?.message}>
         <Textarea
           type="number"
           id="description"
@@ -103,13 +102,13 @@ function CreateCabinForm() {
         <Label htmlFor="image">Cabin photo</Label>
         <FileInput id="image" accept="image/*" />
       </FormRow>
- */}
-      {/* <FormRow>
+
+      <FormRow>
         <Button variation="secondary" type="reset">
           Cancel
         </Button>
         <Button disabled={isCreating}>Create Cabin</Button>
-      </FormRow> */}
+      </FormRow>
     </Form>
   );
 }

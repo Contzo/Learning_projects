@@ -16,7 +16,7 @@ import { Toaster } from "react-hot-toast";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 0 * 1000, // how much time the until the remote state is re-fetched
+      staleTime: 10 * 1000, // how much time the until the remote state is re-fetched
     },
   },
 });

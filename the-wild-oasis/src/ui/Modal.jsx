@@ -57,6 +57,11 @@ function Modal({ children }) {
   const [openName, setOpenName] = useState("");
   const close = () => setOpenName("");
   const open = setOpenName;
+  return (
+    <ModalContext.Provider value={{ openName, close, open }}>
+      {children}
+    </ModalContext.Provider>
+  );
 }
 
 function Open({ children, opens: opensWindowName }) {
@@ -65,7 +70,7 @@ function Open({ children, opens: opensWindowName }) {
   return cloneElement(children, { onClick: () => open(opensWindowName) });
 }
 
-function Window({ children, onClose, name }) {
+function Window({ children, name }) {
   const { openName, close } = useContext(ModalContext);
 
   if (name !== openName) return null;
@@ -73,10 +78,10 @@ function Window({ children, onClose, name }) {
   return createPortal(
     <Overlay>
       <StyledModal>
-        <Button onClick={onClose}>
+        <Button onClick={close}>
           <HiXMark />
         </Button>
-        <div>{children}</div>
+        <div>{cloneElement(children, { onCloseModal: close })}</div>
       </StyledModal>
     </Overlay>,
     document.body

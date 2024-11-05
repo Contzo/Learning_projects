@@ -73,23 +73,26 @@ function CabinRow({ cabin }) {
       )}
 
       <div>
-        <button disabled={isCreating} onClick={handleDuplicate}>
-          <HiSquare2Stack />
-        </button>
         <Modal>
-          <Modal.Open opens={cabinId}>
-            <button>
-              <HiPencil />
-            </button>
-          </Modal.Open>
+          <Menus.Menu>
+            <Menus.Toggle id={cabinId} />
+            <Menus.List id={cabinId}>
+              <Menus.Button icon={<HiSquare2Stack />} onClick={handleDuplicate}>
+                Duplicate
+              </Menus.Button>
+              <Modal.Open opens={cabinId}>
+                <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+              </Modal.Open>
+              <Modal.Open opens="delete">
+                <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+              </Modal.Open>
+            </Menus.List>
+          </Menus.Menu>
+
           <Modal.Window name={cabinId}>
             <CreateCabinForm cabinToEdit={cabin} />
           </Modal.Window>
-          <Modal.Open opens="delete">
-            <button>
-              <HiTrash />
-            </button>
-          </Modal.Open>
+
           <Modal.Window name="delete">
             <ConfirmDelete
               resourceName="cabins"
@@ -98,14 +101,6 @@ function CabinRow({ cabin }) {
             ></ConfirmDelete>
           </Modal.Window>
         </Modal>
-        <Menus.Menu>
-          <Menus.Toggle id={cabinId} />
-          <Menus.List id={cabinId}>
-            <Menus.Button>Duplicate</Menus.Button>
-            <Menus.Button>Edit</Menus.Button>
-            <Menus.Button>Delete</Menus.Button>
-          </Menus.List>
-        </Menus.Menu>
       </div>
     </Table.Row>
   );

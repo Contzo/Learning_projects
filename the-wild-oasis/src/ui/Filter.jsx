@@ -49,6 +49,7 @@ export default function Filter({ filterFieldParam, options }) {
         <FilterButton
           onClick={() => handleClick(option.value)}
           active={currentFilterValue === option.value}
+          key={option.label}
         >
           {option.label}
         </FilterButton>

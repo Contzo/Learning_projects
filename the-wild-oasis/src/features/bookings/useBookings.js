@@ -16,11 +16,11 @@ export function useBookings() {
   const sortBy = { field, direction };
   const {
     isLoading,
-    data: bookings,
+    data: { bookings, count },
     error,
   } = useQuery({
     queryKey: ["bookings", filterObject, sortBy],
     queryFn: () => getBookings({ filter: filterObject, sortBy }),
   });
-  return { isLoading, bookings, error };
+  return { isLoading, bookings, error, count };
 }

@@ -4,9 +4,11 @@ import { useCabins } from "./useCabins";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
 import { useSearchParams } from "react-router-dom";
+import Pagination from "../../ui/Pagination";
+import { PAGE_SIZE } from "../../utils/contstants";
 
 function CabinTable() {
-  const { isLoading, cabins } = useCabins();
+  const { isLoading, cabins, count } = useCabins();
   const [searchParams] = useSearchParams();
   if (isLoading) return <Spinner />;
 
@@ -40,6 +42,11 @@ function CabinTable() {
           data={sortedCabins}
           render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
         />
+        {count > PAGE_SIZE && (
+          <Table.Footer>
+            <Pagination />
+          </Table.Footer>
+        )}
       </Table>
     </Menus>
   );

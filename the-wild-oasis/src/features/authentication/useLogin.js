@@ -10,7 +10,7 @@ export function useLogin() {
     mutationFn: ({ email, password }) => apiLogin({ email, password }),
     onSuccess: (user) => {
       queryClient.setQueriesData(["user"], user); // manually set the cache
-      navigate("/dashboard");
+      navigate("/dashboard", { replace: true });
     },
     onError: (error) => {
       console.log("ERROR", error);

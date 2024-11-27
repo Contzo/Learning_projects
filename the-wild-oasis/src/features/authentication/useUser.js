@@ -5,6 +5,7 @@ export function useUser() {
   const { isLoading, data: user } = useQuery({
     queryKey: ["user"],
     queryFn: getCurrentUser,
+    refetchOnMount: false,
   });
   return { isLoading, user, isAuthenticated: user?.role === "authenticated" };
 }

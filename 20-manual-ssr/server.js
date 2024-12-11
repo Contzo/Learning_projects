@@ -1,6 +1,8 @@
 const { readFileSync } = require("fs");
 const { createServer } = require("http");
 const { parse } = require("url");
+const React = require("react");
+const { renderToString } = require("react-dom/server");
 
 const pizzas = [
   {
@@ -66,8 +68,10 @@ const htmlTemplate = readFileSync(`${__dirname}/index.html`, "utf-8");
 const server = createServer((req, res) => {
   const pathName = parse(req.url, true).pathname;
   if (pathName === "/") {
+    const renderedHTML = renderToString(<Home />);
+    const html = htmlTemplate.replace("%%%CONTENT%%%", renderedHTML);
     res.writeHead(200, { "Content-type": "text/html" });
-    res.end(htmlTemplate);
+    res.end(html);
   } else if (pathName === "/test") res.end("Test");
   else res.end("The URL can not be found ");
 });

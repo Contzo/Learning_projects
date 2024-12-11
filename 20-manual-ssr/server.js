@@ -65,6 +65,7 @@ function MenuItem({ pizza }) {
 }
 
 const htmlTemplate = readFileSync(`${__dirname}/index.html`, "utf-8");
+const clientScript = readFileSync(`${__dirname}/client.js`, "utf-8");
 const server = createServer((req, res) => {
   const pathName = parse(req.url, true).pathname;
   if (pathName === "/") {
@@ -72,8 +73,13 @@ const server = createServer((req, res) => {
     const html = htmlTemplate.replace("%%%CONTENT%%%", renderedHTML);
     res.writeHead(200, { "Content-type": "text/html" });
     res.end(html);
-  } else if (pathName === "/test") res.end("Test");
-  else res.end("The URL can not be found ");
+  } else if (pathName === "/client.js") {
+    res.writeHead(200, { "Content-type": "application/javascript" });
+    res.end(clientScript);
+  } else {
+    res.writeHead(404, { "Content-type": "text/plain" });
+    res.end("The URL can not be found ");
+  }
 });
 
 server.listen(3000, () => console.log("Listening for request on port 3000"));

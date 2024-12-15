@@ -13,6 +13,7 @@ export default function RootLayout({ children }) {
         </header>
         <Navigation />
         <main>{children}</main>
+        <footer>Copyright by the Wild Oasis</footer>
       </body>
     </html>
   );

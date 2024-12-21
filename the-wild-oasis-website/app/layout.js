@@ -16,15 +16,16 @@ export const metadata = {
   description:
     "Luxurious cabin boutique located at the heart of the Italian Dolomites, surrounded by the beautiful mountains and the dark forests",
 };
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body
-        className={`relative grid grid-rows-[auto_1fr] bg-primary-950 text-primary-100 ${josefin.className} min-h-screen`}
+        className={`relative grid grid-rows-[auto_1fr] bg-primary-950 text-primary-100 ${josefin.className} h-full`}
       >
         <Header />
-        <div className=" px-8 py-12 overflow-y-auto">
-          <main className="max-w-7x  mx-auto h-full">{children}</main>
+        <div className="px-8 py-12 h-full overflow-y-auto">
+          <main className="max-w-7xl mx-auto ">{children}</main>
         </div>
       </body>
     </html>

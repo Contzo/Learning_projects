@@ -1,4 +1,4 @@
-import { getCabin } from "@/app/_lib/data-service";
+import { getCabin, getCabins } from "@/app/_lib/data-service";
 import { EyeSlashIcon, MapPinIcon, UsersIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 
@@ -8,6 +8,10 @@ export async function generateMetadata({ params }) {
     title: `Cabin ${name} | Dolomites, Italy`,
     description: `Book your stay at Cabin ${name} in the heart of the Dolomites, Italy.`,
   };
+}
+
+export async function generateStaticParams() {
+  return (await getCabins()).map(({ id }) => ({ params: { cabinId: id } }));
 }
 export default async function Page({ params }) {
   const cabin = await getCabin(params.cabinId);

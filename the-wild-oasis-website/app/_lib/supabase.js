@@ -5,4 +5,5 @@ const supabase = createClient(
   process.env.SUPABASE_PRIVATE_KEY
 );
 
+console.log("Supabase connected");
 export default supabase;

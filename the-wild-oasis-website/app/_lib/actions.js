@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn, signOut } from "./auth";
+import { auth, signIn, signOut } from "./auth";
 
 export async function signInAction() {
   let googleProvider = null;
@@ -34,4 +34,21 @@ export async function signInAction() {
 
 export async function signOutAction() {
   await signOut({ redirectTo: "/" });
+}
+
+export async function updateProfile(formData) {
+  // Firs we need to make sure that the user is authenticated
+  const session = await auth();
+  if (!session) {
+    throw new Error("Not authenticated");
+  }
+  const nationalID = formData.get("nationalID"); // get the national ID from the form data
+  const [nationality, countryFlag] = formData.get("nationality").split("%"); // get the nationality  and country flag from the form data
+
+  // provide a regex test to validate the national ID as alphanumeric string between 6 and 12 characters
+  if (!/^[a-zA-Z0-9]{6,12}$/.test(nationalID)) {
+    throw new Error("Invalid national ID");
+  }
+
+  const updateData = { nationality, countryFlag, nationalID };
 }

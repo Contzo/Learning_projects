@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn } from "./auth";
+import { signIn, signOut } from "./auth";
 
 export async function signInAction() {
   let googleProvider = null;
@@ -30,4 +30,8 @@ export async function signInAction() {
     throw new Error("Sign-in failed");
   }
   await signIn(googleProvider.id, { redirectTo: "/account" });
+}
+
+export async function signOutAction() {
+  await signOut({ redirectTo: "/" });
 }

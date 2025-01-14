@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { auth, signIn, signOut } from "./auth";
 import supabase from "./supabase";
 import { getBookings } from "./data-service";
+import { redirect } from "next/navigation";
 
 export async function signInAction() {
   let googleProvider = null;
@@ -70,6 +71,7 @@ export async function updateProfile(formData) {
 }
 
 export async function deleteReservation(bookingId) {
+  await new Promise((res) => setTimeout(res, 2000)); // Simulate a delay of 2 seconds
   // Firs we need to make sure that the user is authenticated
   const session = await auth();
   if (!session) {
@@ -118,4 +120,5 @@ export async function updateReservation(updateReservationForm) {
     throw new Error("Booking could not be updated");
   }
   revalidatePath(`/account/reservations/edit/${reservationId}`); // Revalidate the reservations page
+  redirect("/account/reservations");
 }

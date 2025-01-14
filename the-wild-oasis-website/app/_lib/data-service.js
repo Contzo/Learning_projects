@@ -66,7 +66,7 @@ export async function getGuest(email) {
 export async function getBooking(id) {
   const { data, error, count } = await supabase
     .from("bookings")
-    .select("*")
+    .select("*, cabins(maxCapacity)")
     .eq("id", id)
     .single();
 
@@ -83,7 +83,7 @@ export async function getBookings(guestId) {
     .from("bookings")
     // We actually also need data on the cabins as well. But let's ONLY take the data that we actually need, in order to reduce downloaded data.
     .select(
-      "id, created_at, startDate, endDate, numNights, numGuests, totalPrice, guestId, cabinId, cabins(name, image)"
+      "id, created_at, startDate, endDate, numNights, numGuests, totalPrice, guestId, cabinId, cabins(name, image, maxCapacity)"
     )
     .eq("guestId", guestId)
     .order("startDate");

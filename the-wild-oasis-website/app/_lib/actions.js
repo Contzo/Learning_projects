@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { auth, signIn, signOut } from "./auth";
 import supabase from "./supabase";
+import { getBookings } from "./data-service";
 
 export async function signInAction() {
   let googleProvider = null;
@@ -66,4 +67,55 @@ export async function updateProfile(formData) {
   }
 
   revalidatePath("/account/profile"); // Revalidate the profile page
+}
+
+export async function deleteReservation(bookingId) {
+  // Firs we need to make sure that the user is authenticated
+  const session = await auth();
+  if (!session) {
+    throw new Error("Not authenticated");
+  }
+
+  const guestBookings = await getBookings(session.user.guestId); // get all the bookings for the authenticated user
+  const guestBookingsIds = guestBookings.map((booking) => booking.id); // get the ids of the bookings
+  if (!guestBookingsIds.includes(bookingId)) {
+    throw new Error("Your are not allowed to delete this booking");
+  }
+
+  const { error } = await supabase
+    .from("bookings")
+    .delete()
+    .eq("id", bookingId);
+  if (error) {
+    throw new Error("Booking could not be deleted");
+  }
+  revalidatePath("/account/reservations"); // Revalidate the reservations page
+}
+
+export async function updateReservation(updateReservationForm) {
+  // Firs we need to make sure that the user is authenticated
+  const session = await auth();
+  if (!session) {
+    throw new Error("Not authenticated");
+  }
+  const reservationId = Number(updateReservationForm.get("reservationId"));
+  const guestBookings = await getBookings(session.user.guestId); // get all the bookings for the authenticated user
+  const guestBookingsIds = guestBookings.map((booking) => booking.id); // get the ids of the bookings
+  if (!guestBookingsIds.includes(reservationId)) {
+    throw new Error("Your are not allowed to update this booking");
+  }
+  const numGuests = updateReservationForm.get("numGuests");
+  const observations = updateReservationForm.get("observations");
+  if (observations.length > 200) {
+    throw new Error("Observations must be less than 200 characters");
+  }
+  const updateData = { numGuests, observations };
+  const { error } = await supabase
+    .from("bookings")
+    .update(updateData)
+    .eq("id", reservationId);
+  if (error) {
+    throw new Error("Booking could not be updated");
+  }
+  revalidatePath(`/account/reservations/edit/${reservationId}`); // Revalidate the reservations page
 }

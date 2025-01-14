@@ -1,6 +1,8 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { auth, signIn, signOut } from "./auth";
+import supabase from "./supabase";
 
 export async function signInAction() {
   let googleProvider = null;
@@ -51,4 +53,17 @@ export async function updateProfile(formData) {
   }
 
   const updateData = { nationality, countryFlag, nationalID };
+  const guestId = session.user.guestId;
+  const { data, error } = await supabase
+    .from("guests")
+    .update(updateData)
+    .eq("id", guestId)
+    .select()
+    .single();
+
+  if (error) {
+    throw new Error("Guest could not be updated");
+  }
+
+  revalidatePath("/account/profile"); // Revalidate the profile page
 }

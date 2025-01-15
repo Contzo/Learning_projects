@@ -5,6 +5,7 @@ import { auth, signIn, signOut } from "./auth";
 import supabase from "./supabase";
 import { getBookings } from "./data-service";
 import { redirect } from "next/navigation";
+import { isWithinInterval } from "date-fns";
 
 export async function signInAction() {
   let googleProvider = null;
@@ -71,7 +72,6 @@ export async function updateProfile(formData) {
 }
 
 export async function deleteReservation(bookingId) {
-  await new Promise((res) => setTimeout(res, 2000)); // Simulate a delay of 2 seconds
   // Firs we need to make sure that the user is authenticated
   const session = await auth();
   if (!session) {
@@ -121,4 +121,57 @@ export async function updateReservation(updateReservationForm) {
   }
   revalidatePath(`/account/reservations/edit/${reservationId}`); // Revalidate the reservations page
   redirect("/account/reservations");
+}
+
+export async function createBooking(bookingData, formData) {
+  // 1. we need to make sure that the user is authenticated
+  const session = await auth();
+  if (!session) {
+    throw new Error("Not authenticated");
+  }
+
+  // 2. Construct the new booking object
+  const createBookingObject = {
+    ...bookingData,
+    guestId: session.user.guestId,
+    numGuests: formData.get("numGuests"),
+    observations: formData.get("observations").slice(0, 1000),
+    extrasPrice: 0,
+    totalPrice: bookingData.cabinPrice,
+    isPaid: false,
+    hasBreakfast: false,
+    status: "unconfirmed",
+  };
+  // 3. Validate the received data
+  // a) Get all the bookings for the cabin we want to reserve starting from the start date
+  const { data: cabinReservations, error: cabinResError } = await supabase
+    .from("bookings")
+    .select("startDate, endDate")
+    .eq("cabinId", bookingData.cabinId);
+  if (cabinResError) {
+    throw new Error("Could not fetch the cabin bookings for validation");
+  }
+  // check if the cabin is not already booked.
+  const isValidReservation = !cabinReservations.some(
+    (bookedInterval) =>
+      bookingData.start <= new Date() ||
+      (bookedInterval.startDate <= bookingData.endDate &&
+        bookedInterval.endDate >= bookingData.startDate)
+  );
+  if (!isValidReservation) {
+    throw new Error(`Tried to book an unavailable date for the cabin`);
+  }
+  // 4. create the new DB entry
+  const { error } = await supabase
+    .from("bookings")
+    .insert([createBookingObject]);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Booking could not be created");
+  }
+  // 5. Revalidate the Router cache to keep the UI fresh
+  revalidatePath(`/cabins/${createBookingObject.cabinId}`);
+  // // 6. Redirect to user to thank you
+  redirect("/cabins/thankyou");
 }

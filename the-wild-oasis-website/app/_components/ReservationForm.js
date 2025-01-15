@@ -1,7 +1,20 @@
-function ReservationForm({ cabin, user }) {
-  // CHANGE
-  const { maxCapacity } = cabin;
+"use client";
 
+import { differenceInDays } from "date-fns";
+import { useReservationContext } from "./ReservationContext";
+import { createBooking } from "../_lib/actions";
+import { useFormStatus } from "react-dom";
+
+function ReservationForm({ cabin, user }) {
+  const { range, resetRange } = useReservationContext();
+  const { maxCapacity, regularPrice, discount, id: cabinId } = cabin;
+  const startDate = range.to;
+  const endDate = range.from;
+  const numNights = differenceInDays(startDate, endDate);
+  const cabinPrice = numNights * (regularPrice - discount);
+
+  const bookingData = { startDate, endDate, numNights, cabinPrice, cabinId };
+  const createBookingWithData = createBooking.bind(null, bookingData);
   return (
     <div className="w-full">
       <div className="bg-primary-800 text-primary-300 px-16 py-2 flex justify-between items-center">
@@ -19,7 +32,13 @@ function ReservationForm({ cabin, user }) {
         </div>
       </div>
 
-      <form className="bg-primary-900 py-10 px-16 text-lg flex gap-5 flex-col">
+      <form
+        action={async (formData) => {
+          await createBookingWithData(formData);
+          resetRange();
+        }}
+        className="bg-primary-900 py-10 px-16 text-lg flex gap-5 flex-col"
+      >
         <div className="space-y-2">
           <label htmlFor="numGuests">How many guests?</label>
           <select
@@ -50,17 +69,25 @@ function ReservationForm({ cabin, user }) {
             placeholder="Any pets, allergies, special requirements, etc.?"
           />
         </div>
-
+        <SubmitButton />
         <div className="flex justify-end items-center gap-6">
           <p className="text-primary-300 text-base">Start by selecting dates</p>
-
-          <button className="bg-accent-500 px-8 py-4 text-primary-800 font-semibold hover:bg-accent-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300">
-            Reserve now
-          </button>
         </div>
       </form>
     </div>
   );
 }
 
+function SubmitButton() {
+  const { range } = useReservationContext();
+  const { pending } = useFormStatus();
+  return (
+    <button
+      disabled={!(range.to && range.from)}
+      className="bg-accent-500 px-8 py-4 text-primary-800 font-semibold hover:bg-accent-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300"
+    >
+      {pending ? "Creating reservation..." : "Reserve now"}
+    </button>
+  );
+}
 export default ReservationForm;

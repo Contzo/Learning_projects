@@ -1,5 +1,10 @@
 "use client";
-import { isWithinInterval } from "date-fns";
+import {
+  differenceInDays,
+  isPast,
+  isSameDay,
+  isWithinInterval,
+} from "date-fns";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { useReservationContext } from "./ReservationContext";
@@ -15,15 +20,14 @@ function isAlreadyBooked(range, datesArr) {
 }
 
 function DateSelector({ settings, cabin, bookedDates }) {
-  const { range, setRange, resetRange } = useReservationContext();
-  // CHANGE
-  const regularPrice = 23;
-  const discount = 23;
-  const numNights = 23;
-  const cabinPrice = 23;
-
-  // SETTINGS
-  const { minBookingLength, maxBookingLength } = settings;
+  const { range, setRange, resetRange } = useReservationContext(); // get the range and setRange function from the context
+  const { regularPrice, discount } = cabin; // get the regularPrice and discount from the cabin
+  const displayRange = isAlreadyBooked(range, bookedDates)
+    ? { to: null, from: null }
+    : range; // check if the range is already booked
+  const numNights = differenceInDays(displayRange.to, displayRange.from); // calculate the number of nights
+  const cabinPrice = numNights * (regularPrice - discount); // calculate the cabin price
+  const { minBookingLength, maxBookingLength } = settings; // get the minBookingLength and maxBookingLength from the settings
 
   return (
     <div className="flex flex-col justify-between">
@@ -31,7 +35,7 @@ function DateSelector({ settings, cabin, bookedDates }) {
         captionLayout="dropdown"
         mode="range"
         onSelect={(range) => setRange(range)}
-        selected={range}
+        selected={displayRange}
         min={minBookingLength + 1}
         max={{ maxBookingLength }}
         numberOfMonths={2}
@@ -39,6 +43,10 @@ function DateSelector({ settings, cabin, bookedDates }) {
         showOutsideDays
         startMonth={new Date()}
         endMonth={new Date(new Date().getFullYear() + 5, 11)}
+        disabled={(currentDate) =>
+          isPast(currentDate) ||
+          bookedDates.some((date) => isSameDay(date, currentDate))
+        }
       />
 
       <div className="flex items-center justify-between px-8 bg-accent-500 text-primary-800 h-[72px]">
@@ -69,7 +77,7 @@ function DateSelector({ settings, cabin, bookedDates }) {
           ) : null}
         </div>
 
-        {range.from || range.to ? (
+        {displayRange.from || displayRange.to ? (
           <button
             className="border border-primary-800 py-2 px-4 text-sm font-semibold"
             onClick={() => resetRange()}
